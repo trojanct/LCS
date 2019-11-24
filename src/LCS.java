@@ -14,16 +14,16 @@ public class LCS {
     static long MAXV =  2000000000;
     static long MINV = -2000000000;
     static int numberOfTrials = 100;
-    static int MAXINPUTSIZE  = (int) Math.pow(2,12);
+    static int MAXINPUTSIZE  = (int) Math.pow(2,14);
     static int MININPUTSIZE  =  1;
 
     public static void main( String[] args)
     {
 
         //calling full experiment with text file names, running the three experiments as usual for consistency
-        runFullExperiment("Test-Exp1-ThrowAway.txt");
-        runFullExperiment("Test-Exp2.txt");
-        runFullExperiment("Test-Exp3.txt");
+        runFullExperiment("Test1-Exp1-ThrowAway.txt");
+        runFullExperiment("Test2-Exp2.txt");
+        runFullExperiment("Test3-Exp3.txt");
 
 
     }
@@ -95,8 +95,7 @@ public class LCS {
 
                 //TrialStopwatch.start(); // *** uncomment this line if timing trials individually
                 /* run the function we're testing on the trial input */
-                test( randomstring1, randomstring1);
-                //long counted = fastestthree(testList);
+                test( randomstring1, randomstring2);
                 // batchElapsedTime = batchElapsedTime + TrialStopwatch.elapsedTime(); // *** uncomment this line if timing trials individually
 
             }
@@ -141,13 +140,13 @@ public class LCS {
         int i, j, k;
         int lcsLen = 0;
         int small,big;
-
+        k = 0;
 
         if(s1.length() == 0 || s2.length() == 0)
         {
             return 0;
         }
-        if(s1.length() < s2.length())
+      /*  if(s1.length() > s2.length())
         {
             big = s1.length();
             small = s2.length();
@@ -158,6 +157,12 @@ public class LCS {
             small = s1.length();
         }
 
+*/
+        small = s1.length();
+        big = s2.length();
+        int [][] array = new int[small+1][big+1];
+
+
         for(i=0; i <= small; i++)
         {
             if(lcsLen >= small - i)
@@ -166,19 +171,18 @@ public class LCS {
             }
             for(j=0; j <= big; j++)
             {
-                for(k=0; k < s1.length()-i  && k < s2.length()-j  ; k++)
-
+                if( i == 0 || j == 0)
                 {
-                    if( s1.charAt(i+k) != s2.charAt(j+k))
-                    {
-                        break;
-                    }
-
-
+                    array[i][j] = 0;
                 }
-                if(k > lcsLen)
+                else if(s1.charAt( i - 1  ) == s2.charAt(j -1 ))
                 {
-                    lcsLen = k;
+                    array[i][j] = array[i - 1][ j-1 ]+1;
+                    lcsLen = Integer.max(lcsLen, array[i][j]);
+                }
+                else
+                {
+                    array[i][j] = 0;
                 }
             }
         }
